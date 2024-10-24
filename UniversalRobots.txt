@@ -1,0 +1,78 @@
+ Program
+   BeforeStart
+     var_1≔socket_open("192.168.2.108",30000)
+     MoveL
+       Waypoint_12
+       Set TO[0]=Apagar
+       Wait: 0.2
+       Set TO[1]=Apagar
+       Wait: 0.2
+   Robot Program
+     MoveJ
+       Waypoint_13
+     Loop var_1≟ False 
+       var_1≔socket_open("192.168.2.108",30000)
+       Wait: 0.5
+     socket_send_string("asking_for_data")
+     Wait: 0.5
+     Wait (digital_in[0]≟ True ) or (digital_in[1]≟ True )
+     mov1≔digital_in[0]
+     mov2≔digital_in[1]
+     var_2≔socket_read_ascii_float(3)
+     Wait: 0.5
+     var_1≔ False 
+     socket_close()
+     If var_2[0]≠0
+       var_3≔p[var_2[1]/1000,var_2[2]/1000,0,0,0,0]
+       var_4≔get_actual_tcp_pose()
+       var_5≔pose_trans(var_4,var_3)
+     MoveL
+       Waypoint_1
+       MoveL
+         Set TO[0]=Apagar
+         Wait: 0.2
+         Set TO[1]=Apagar
+         Wait: 0.2
+         Set TO[0]=Encender
+         Wait: 0.2
+         Set TO[0]=Apagar
+         Wait: 1.0
+         Waypoint_2
+         Wait: 0.05
+         Set TO[1]=Encender
+         Wait: 0.2
+         Set TO[1]=Apagar
+         Wait: 0.2
+       MoveL
+         Waypoint_11
+     If (mov1≟ True ) and (mov2≟ False )
+       MoveL
+         Waypoint_3
+         MoveJ
+           Waypoint_10
+         MoveL
+           Waypoint_4
+           Set TO[0]=Encender
+           Wait: 0.2
+           Set TO[0]=Apagar
+           Wait: 0.2
+         Wait: 1.0
+         MoveL
+           Waypoint_7
+         MoveJ
+           Waypoint_6
+     If (mov1≟ False ) and (mov2≟ True )
+       MoveJ
+         Waypoint_14
+       MoveL
+         Waypoint_5
+         Wait: 0.2
+       MoveL
+         Waypoint_8
+         Set TO[0]=Encender
+         Wait: 0.2
+         Set TO[0]=Apagar
+         Wait: 0.2
+         Wait: 1.0
+       MoveL
+         Waypoint_9
